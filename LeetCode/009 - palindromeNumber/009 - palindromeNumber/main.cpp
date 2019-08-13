@@ -12,26 +12,23 @@
 using namespace std;
 
 /*
- Let n be the number of digits/characters in x
- Time Complexity: O(n/2) = O(n)
+ Time Complexity: O(log_10(n))
  Space Complexity: O(1)
  */
 
-bool isPalRec(string str) {
-    int len = str.length();
-    // Base cases
-    if (len == 0 || len == 1) {
-        return true;
-    }
-    if (str[0] == str[len - 1]) {
-        return isPalRec(str.substr(1, len - 2));
-    }
-    return false;
-}
-
 bool isPalindrome(int x) {
-    string str = to_string(x);
-    return isPalRec(str);
+    // Special cases:
+    if (x < 0 || (x % 10 == 0 && x != 0)) {
+        return false;
+    }
+    // Revert half of the number to avoid overflow
+    int revertedNumber = 0;
+    while (x > revertedNumber) {
+        revertedNumber = revertedNumber * 10 + x % 10;
+        x /= 10;
+    }
+    // When length is odd the middle digit is appended to revertedNumber, but doesn't matter
+    return x == revertedNumber || x == revertedNumber / 10;
 }
 
 int main(int argc, const char * argv[]) {
